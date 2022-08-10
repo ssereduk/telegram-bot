@@ -7,6 +7,8 @@ import (
 	"net/url"
 	"path"
 	"strconv"
+
+	"github.com/ssereduk/telegram-bot/lib/e"
 )
 
 type Client struct {
@@ -20,8 +22,8 @@ const (
 	sendMessageMethod = "sendMessage"
 )
 
-func New(host string, token string) Client {
-	return Client{
+func New(host string, token string) *Client {
+	return &Client{
 		host:     host,
 		basePath: newBasePath(token), //"bot" + token,
 		client:   http.Client{},
@@ -55,7 +57,7 @@ func (c *Client) Updates(offset int, limit int) ([]Update, error) {
 
 func (c *Client) SendMessage(chatID int, text string) error {
 	q := url.Values{}
-	q.Add("chat_id", strconv.Ttoa(chatID))
+	q.Add("chat_id", strconv.Itoa(chatID))
 	q.Add("text", text)
 
 	_, err := c.doRequest(sendMessageMethod, q)
